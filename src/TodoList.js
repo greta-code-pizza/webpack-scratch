@@ -1,54 +1,47 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import { render } from 'react-dom';
 
 import './style.scss';
 
-function Todo(props) {
-  return (
-    <div className="todo">
-      <p>{props.message}</p>
-    </div>
-  )
+function Task(props) {
+  return <p>{props.content}</p>
 }
 
-
-export default class TodoList extends Component {
+class TodoList extends Component {
   constructor() {
     super();
-    this.state = {
-      currentMessage: null,
-    	list: []
+
+    this.state = { 
+      currentTask: "",
+      list: [] 
     }
 
-    this.cleanCurrentMessage = this.cleanCurrentMessage.bind(this);
-    this.handleCurrentMessage = this.handleCurrentMessage.bind(this);
-    this.addTodo = this.addTodo.bind(this);
+    this.addToList = this.addToList.bind(this);
+    this.handleTask = this.handleTask.bind(this)
   }
 
-  cleanCurrentMessage() {
-    this.setState({currentMessage: null})
+  addToList() {
+    const {list, currentTask} = this.state;
+    const newList = [...list, <Task content={currentTask} />];
+
+    this.setState({list: newList});
   }
 
-  handleCurrentMessage(e) {
-    this.setState({currentMessage: e.target.value})
+  handleTask(e) {
+    this.setState({currentTask: e.target.value});
   }
 
-  addTodo() {
-    let {list, currentMessage} = this.state;
-    this.setState({list: [...list, <Todo message={currentMessage} />]});
-
-    this.cleanCurrentMessage();
-  }
-  
   render() {
-    let {list} = this.state;
-
+    const {list, currentTask} = this.state;
     return (
       <>
-        <h1>Todolist</h1>
-        <input onChange={this.handleCurrentMessage} /> 
-        <button onClick={this.addTodo}>Ajouter une tâche</button>
-
+        <h1>Ma TodoList</h1>
+        <input 
+          type='text' 
+          onChange={this.handleTask} 
+          value={currentTask} 
+        />
+        <button onClick={this.addToList}>Ajouter une tâche</button>
         {list}
       </>
     )
